@@ -1,0 +1,496 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
+:root {
+  --clr-primary-300: hsl(239, 57%, 85%);
+  --clr-primary-600: hsl(238, 40%, 52%);
+  --clr-secondary-300: hsl(357, 100%, 86%);
+  --clr-secondary-600: hsl(358, 79%, 66%);
+
+  --clr-neutral-100: hsl(0, 0%, 100%);
+  --clr-neutral-200: hsl(228, 33%, 97%);
+  --clr-neutral-300: hsl(223, 19%, 93%);
+  --clr-neutral-600: hsl(211, 10%, 45%);
+  --clr-neutral-800: hsl(212, 24%, 26%);
+
+  --ff-primary: "Rubik", sans-serif;
+  --ff-body: var(--ff-primary);
+  --ff-headings: var(--ff-primary);
+
+  --fw-regular: 400;
+  --fw-semi-bold: 500;
+  --fw-bold: 700;
+
+  --fs-300: 0.83rem;
+  --fs-400: 1rem;
+  --fs-500: 1.2rem;
+  --fs-600: 1.44rem;
+  --fs-700: 1.73rem;
+  --fs-800: 2.07rem;
+  --fs-900: 2.49rem;
+
+  --fs-base: var(var(--fs-400));
+  --fs-button: var(var(--fs-500));
+}
+
+@media (min-width: 50em) {
+  :root {
+    --fs-300: 1rem;
+    --fs-400: 1.25rem;
+    --fs-500: 1.56rem;
+    --fs-600: 1.95rem;
+    --fs-700: 2.44rem;
+    --fs-800: 3.05rem;
+    --fs-900: 3.82rem;
+  }
+}
+
+/* reset css */
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin, padding, font */
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--ff-body);
+  font-size: var(--fs-base);
+  background: var(--clr-neutral-200);
+  line-height: 1.6;
+  text-rendering: optimizeSpeed;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+/* Make images easier to work with */
+img,
+svg,
+picture {
+  display: block;
+  max-width: 100%;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *:before,
+  *:after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* general styling */
+
+main {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: max-content;
+}
+
+p:not([class]),
+ul:not([class]),
+li:not([class]) {
+  max-width: 60ch;
+}
+
+.flow > * + * {
+  margin-top: var(--flow-spacer, 1em);
+}
+
+.comment {
+  --flow-spacer: 1.25em;
+  padding: 1.5em;
+  border-radius: 0.5em;
+}
+
+@media (min-width: 40em) {
+  .comment {
+    position: relative;
+    padding-left: 5.5em;
+    min-height: 9.3em;
+  }
+}
+
+.comment-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+.comment-info img {
+  width: 2.5rem;
+}
+
+.username span {
+  margin-left: 0.25em;
+}
+
+.you {
+  padding-inline: 0.5em;
+  border-radius: 0.25em;
+  text-align: start;
+  display: inline-flex;
+}
+
+.comment-content {
+  max-width: 50ch;
+  word-wrap: break-word;
+}
+.comment-content > span + span[contenteditable="true"],
+.comment-content > span + span[contenteditable="true"]:focus-visible {
+  outline: 0;
+}
+
+.comment-content.flashing {
+  scroll-margin-top: 5.5em;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  animation-name: focus-animation;
+  animation-duration: 500ms;
+  animation-iteration-count: 3;
+  animation-fill-mode: forwards;
+}
+
+/* Define the animation keyframes */
+@keyframes focus-animation {
+  0% {
+    outline-color: transparent;
+  }
+  50% {
+    outline-color: blue;
+  }
+  100% {
+    outline-color: transparent;
+  }
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buttons-container div {
+  display: flex;
+  gap: 0.5em;
+  text-align: right;
+  vertical-align: baseline;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 40em) {
+  .buttons-container {
+    margin-top: 0;
+  }
+  .buttons-container > div,
+  .buttons-container > .button[data-type="reply"] {
+    position: absolute;
+    top: 2em;
+    right: 1.5em;
+  }
+}
+
+.score {
+  padding: 0.25em 0.5em;
+  display: flex;
+  gap: 0.5rem;
+  border-radius: 0.5em;
+  align-content: center;
+  align-items: center;
+}
+
+@media (min-width: 40em) {
+  .score {
+    position: absolute;
+    top: 1.5em;
+    bottom: 0;
+    left: 1.5em;
+    flex-direction: column;
+    height: fit-content;
+    min-height: fit-content;
+  }
+}
+
+.score .button {
+  display: inline-block;
+}
+
+.button {
+  background-color: transparent;
+  border: 0;
+  padding-inline: 0.5em;
+  cursor: pointer;
+}
+
+.button[data-type="reply"],
+.button[data-type="edit"],
+.button[data-type="delete"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.threads {
+  --flow-spacer: 1.25em;
+  padding-left: 1.25em;
+  position: relative;
+}
+@media (min-width: 40em) {
+  .threads {
+    margin-left: 1.25em;
+  }
+}
+.threads::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 0.2rem;
+  height: 100%;
+  background: var(--clr-neutral-300);
+  border-radius: 100vmax;
+}
+
+.create-comment {
+  padding: 1em;
+  border-radius: 0.5em;
+}
+
+.create-comment textarea {
+  border: 1px solid var(--clr-neutral-300);
+  overflow: hidden;
+  border-radius: 0.25em;
+  outline-offset: 2px;
+  padding: 1em;
+  resize: none;
+  width: 100%;
+}
+
+.create-comment div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.create-comment .button {
+  padding: 0.5em 2em;
+  border-radius: 0.5em;
+}
+.button[data-type="update"] {
+  padding: 0.5em 1.5em;
+  border-radius: 0.5em;
+}
+
+.button[data-type="update"].editing {
+  display: flex;
+  margin-left: auto;
+}
+
+.create-comment img {
+  width: 2.5rem;
+}
+.create-reply {
+  border-radius: 0.5em;
+  display: flex;
+  align-items: self-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1em;
+}
+
+.create-reply img {
+  width: 2.5rem;
+}
+
+.create-reply textarea {
+  border: 1px solid var(--clr-neutral-300);
+  overflow: hidden;
+  border-radius: 0.25em;
+  outline-offset: 2px;
+  padding: 0.75em;
+  resize: none;
+  width: 100%;
+}
+
+.create-reply .button {
+  align-self: self-start;
+  padding: 0.5em 1em;
+  border-radius: 0.5em;
+}
+
+/* utility classes */
+
+ul.threads:empty {
+  display: none;
+}
+
+.text-primary-300 {
+  color: var(--clr-primary-300);
+}
+.text-primary-600 {
+  color: var(--clr-primary-600);
+}
+.text-secondary-300 {
+  color: var(--clr-secondary-300);
+}
+.text-secondary-600 {
+  color: var(--clr-secondary-600);
+}
+.text-neutral-100 {
+  color: var(--clr-neutral-100);
+}
+.text-neutral-200 {
+  color: var(--clr-neutral-200);
+}
+.text-neutral-300 {
+  color: var(--clr-neutral-300);
+}
+.text-neutral-600 {
+  color: var(--clr-neutral-600);
+}
+.text-neutral-800 {
+  color: var(--clr-neutral-800);
+}
+.bg-primary-300 {
+  background-color: var(--clr-primary-300);
+}
+.bg-primary-600 {
+  background-color: var(--clr-primary-600);
+}
+.bg-secondary-300 {
+  background-color: var(--clr-secondary-300);
+}
+.bg-secondary-600 {
+  background-color: var(--clr-secondary-600);
+}
+.bg-neutral-100 {
+  background-color: var(--clr-neutral-100);
+}
+.bg-neutral-200 {
+  background-color: var(--clr-neutral-200);
+}
+.bg-neutral-300 {
+  background-color: var(--clr-neutral-300);
+}
+.bg-neutral-600 {
+  background-color: var(--clr-neutral-600);
+}
+.bg-neutral-800 {
+  background-color: var(--clr-neutral-800);
+}
+.fw-regular {
+  font-weight: var(--fw-regular);
+}
+.fw-semi-bold {
+  font-weight: var(--fw-semi-bold);
+}
+.fw-bold {
+  font-weight: var(--fw-bold);
+}
+
+.fs-300 {
+  font-size: var(--fs-300);
+}
+.fs-400 {
+  font-size: var(--fs-400);
+}
+.fs-500 {
+  font-size: var(--fs-500);
+}
+.fs-600 {
+  font-size: var(--fs-600);
+}
+.fs-700 {
+  font-size: var(--fs-700);
+}
+.fs-800 {
+  font-size: var(--fs-800);
+}
+.fs-900 {
+  font-size: var(--fs-900);
+}
+
+.hidden {
+  display: none;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.container {
+  padding: 1em;
+  max-width: 45em;
+  margin-inline: auto;
+}
+
+.button[data-type="edit"]:hover span,
+.button[data-type="edit"]:focus-visible span {
+  color: var(--clr-primary-300);
+}
+.button[data-type="delete"]:hover span,
+.button[data-type="delete"]:focus-visible span {
+  color: var(--clr-secondary-300);
+}
+.button[data-type="edit"]:hover img,
+.button[data-type="edit"]:focus-visible img {
+  opacity: 0.3;
+}
+
+.button[data-type="delete"]:hover img,
+.button[data-type="delete"]:focus-visible img {
+  opacity: 0.4;
+}
+
+.button[data-type="reply"]:hover span,
+.button[data-type="reply"]:hover span {
+  color: var(--clr-primary-300);
+}
+.button[data-type="reply"]:hover img,
+.button[data-type="reply"]:focus-visible img {
+  opacity: 0.3;
+}
+.button[data-type="update"]:hover,
+.button[data-type="update"]:focus-visible,
+.button[type="submit"]:hover,
+.button[type="submit"]:focus-visible {
+  background-color: var(--clr-primary-300);
+}
+.button[data-type="take"]:focus-visible,
+.button[data-type="add"]:focus-visible,
+.button[data-type="take"]:hover,
+.button[data-type="add"]:hover {
+  color: var(--clr-primary-600);
+}
