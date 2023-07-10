@@ -552,7 +552,7 @@ ul.threads:empty {
 }
 
 .button[data-type="reply"]:hover span,
-.button[data-type="reply"]:hover span {
+.button[data-type="reply"]:focus-visible span {
   color: var(--clr-primary-300);
 }
 .button[data-type="reply"]:hover img,
