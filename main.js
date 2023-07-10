@@ -42,118 +42,123 @@ getData().then(({ comments, currentUser }) => {
   function handleReplyThread(event) {
     event.preventDefault();
     const formText = new FormData(event.target);
-    const commentReply = {
-      id: 3,
-      content: [...formText.entries()][0][1],
-      createdAt: "just now",
-      score: 0,
-      replyingTo: event.target.previousElementSibling
-        .querySelector(".comment-info > img + span")
-        .textContent.trim(),
-      user: {
-        image: {
-          png: currentUser.image.png,
-          webp: currentUser.image.webp,
+    const entries = [...formText.entries()];
+    if (entries[0][1]) {
+      const commentReply = {
+        id: 3,
+        content: entries[0][1],
+        createdAt: "just now",
+        score: 0,
+        replyingTo: event.target.previousElementSibling
+          .querySelector(".comment-info > img + span")
+          .textContent.trim(),
+        user: {
+          image: {
+            png: currentUser.image.png,
+            webp: currentUser.image.webp,
+          },
+          username: currentUser.username,
         },
-        username: currentUser.username,
-      },
-    };
+      };
 
-    event.target.parentElement.nextElementSibling.innerHTML += replyComment(
-      commentReply,
-      currentUser.username
-    );
-    event.target.querySelector("textarea").value = "";
-    event.target.classList.add("hidden");
+      event.target.parentElement.nextElementSibling.innerHTML += replyComment(
+        commentReply,
+        currentUser.username
+      );
+      event.target.querySelector("textarea").value = "";
+      event.target.classList.add("hidden");
 
-    const addBtns =
-      event.target.parentElement.nextElementSibling.querySelectorAll(
-        ".button[data-type='add']"
-      );
-    addBtns.forEach((addBtn) => {
-      addBtn.addEventListener("click", () => {
-        addBtn.nextElementSibling.textContent =
-          Number(addBtn.nextElementSibling.textContent) + 1;
+      const addBtns =
+        event.target.parentElement.nextElementSibling.querySelectorAll(
+          ".button[data-type='add']"
+        );
+      addBtns.forEach((addBtn) => {
+        addBtn.addEventListener("click", () => {
+          addBtn.nextElementSibling.textContent =
+            Number(addBtn.nextElementSibling.textContent) + 1;
+        });
       });
-    });
-    const takeBtns =
-      event.target.parentElement.nextElementSibling.querySelectorAll(
-        ".button[data-type='take']"
-      );
-    takeBtns.forEach((takeBtn) => {
-      takeBtn.addEventListener("click", () => {
-        takeBtn.previousElementSibling.textContent =
-          Number(takeBtn.previousElementSibling.textContent) === 0
-            ? 0
-            : Number(takeBtn.previousElementSibling.textContent) - 1;
+      const takeBtns =
+        event.target.parentElement.nextElementSibling.querySelectorAll(
+          ".button[data-type='take']"
+        );
+      takeBtns.forEach((takeBtn) => {
+        takeBtn.addEventListener("click", () => {
+          takeBtn.previousElementSibling.textContent =
+            Number(takeBtn.previousElementSibling.textContent) === 0
+              ? 0
+              : Number(takeBtn.previousElementSibling.textContent) - 1;
+        });
       });
-    });
-    const delBtns =
-      event.target.parentElement.nextElementSibling.querySelectorAll(
-        ".button[data-type='delete']"
-      );
-    delBtns.forEach((delBtn) => {
-      delBtn.addEventListener("click", () => {
-        const modal =
-          delBtn.parentElement.parentElement.parentElement.parentElement.querySelector(
-            ".modal"
+      const delBtns =
+        event.target.parentElement.nextElementSibling.querySelectorAll(
+          ".button[data-type='delete']"
+        );
+      delBtns.forEach((delBtn) => {
+        delBtn.addEventListener("click", () => {
+          const modal =
+            delBtn.parentElement.parentElement.parentElement.parentElement.querySelector(
+              ".modal"
+            );
+          modal.showModal();
+          const close = modal.querySelector(
+            ".button[data-type='delete-comment'"
           );
-        modal.showModal();
-        const close = modal.querySelector(".button[data-type='delete-comment'");
-        close.addEventListener("click", () => {
-          delBtn.parentElement.parentElement.parentElement.parentElement.remove();
-        });
-        const cancel = modal.querySelector(".button[data-type='cancel'");
-        cancel.addEventListener("click", () => {
-          modal.close();
+          close.addEventListener("click", () => {
+            delBtn.parentElement.parentElement.parentElement.parentElement.remove();
+          });
+          const cancel = modal.querySelector(".button[data-type='cancel'");
+          cancel.addEventListener("click", () => {
+            modal.close();
+          });
         });
       });
-    });
-    const editBtns =
-      event.target.parentElement.nextElementSibling.querySelectorAll(
-        ".button[data-type='edit']"
-      );
-    editBtns.forEach((editBtn) => {
-      editBtn.addEventListener("click", () => {
-        editBtn.parentElement.parentElement.previousElementSibling.children[1].contentEditable =
-          "true";
-        editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
-          "hidden"
+      const editBtns =
+        event.target.parentElement.nextElementSibling.querySelectorAll(
+          ".button[data-type='edit']"
         );
-        editBtn.parentElement.parentElement.nextElementSibling.classList.add(
-          "editing"
-        );
-        editBtn.parentElement.parentElement.previousElementSibling.classList.add(
-          "flashing"
-        );
-        editBtn.parentElement.parentElement.previousElementSibling.scrollIntoView(
-          { behavior: "smooth" }
-        );
+      editBtns.forEach((editBtn) => {
+        editBtn.addEventListener("click", () => {
+          editBtn.parentElement.parentElement.previousElementSibling.children[1].contentEditable =
+            "true";
+          editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
+            "hidden"
+          );
+          editBtn.parentElement.parentElement.nextElementSibling.classList.add(
+            "editing"
+          );
+          editBtn.parentElement.parentElement.previousElementSibling.classList.add(
+            "flashing"
+          );
+          editBtn.parentElement.parentElement.previousElementSibling.scrollIntoView(
+            { behavior: "smooth" }
+          );
 
-        editBtn.parentElement.parentElement.previousElementSibling.addEventListener(
-          "animationend",
-          () => {
-            editBtn.parentElement.parentElement.previousElementSibling.classList.remove(
-              "flashing"
-            );
-          }
-        );
+          editBtn.parentElement.parentElement.previousElementSibling.addEventListener(
+            "animationend",
+            () => {
+              editBtn.parentElement.parentElement.previousElementSibling.classList.remove(
+                "flashing"
+              );
+            }
+          );
 
-        editBtn.parentElement.parentElement.nextElementSibling.addEventListener(
-          "click",
-          () => {
-            editBtn.parentElement.parentElement.previousElementSibling.children[1].contentEditable =
-              "false";
-            editBtn.parentElement.parentElement.nextElementSibling.classList.add(
-              "hidden"
-            );
-            editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
-              "editing"
-            );
-          }
-        );
+          editBtn.parentElement.parentElement.nextElementSibling.addEventListener(
+            "click",
+            () => {
+              editBtn.parentElement.parentElement.previousElementSibling.children[1].contentEditable =
+                "false";
+              editBtn.parentElement.parentElement.nextElementSibling.classList.add(
+                "hidden"
+              );
+              editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
+                "editing"
+              );
+            }
+          );
+        });
       });
-    });
+    }
   }
 
   replyBtns.forEach((replyBtn) => {
@@ -189,123 +194,126 @@ getData().then(({ comments, currentUser }) => {
       function handleReplyThread(event) {
         event.preventDefault();
         const formText = new FormData(event.target);
-        const commentReply = {
-          id: 3,
-          content: [...formText.entries()][0][1],
-          createdAt: "just now",
-          score: 0,
-          replyingTo: event.target.previousElementSibling
-            .querySelector(".comment-info > img + span")
-            .textContent.trim(),
-          user: {
-            image: {
-              png: currentUser.image.png,
-              webp: currentUser.image.webp,
+        const entries = [...formText.entries()];
+        if (entries[0][1]) {
+          const commentReply = {
+            id: 3,
+            content: entries[0][1],
+            createdAt: "just now",
+            score: 0,
+            replyingTo: event.target.previousElementSibling
+              .querySelector(".comment-info > img + span")
+              .textContent.trim(),
+            user: {
+              image: {
+                png: currentUser.image.png,
+                webp: currentUser.image.webp,
+              },
+              username: currentUser.username,
             },
-            username: currentUser.username,
-          },
-        };
-        const wrapper = document.createElement("div");
+          };
+          const wrapper = document.createElement("div");
 
-        wrapper.innerHTML = replyComment(commentReply, currentUser.username);
+          wrapper.innerHTML = replyComment(commentReply, currentUser.username);
 
-        event.target.parentElement.parentElement.appendChild(
-          wrapper.firstElementChild
-        );
-
-        event.target.querySelector("textarea").value = "";
-        event.target.classList.add("hidden");
-        replyBox.removeEventListener("submit", handleReplyThread);
-        const addBtns =
-          event.target.parentElement.parentElement.lastElementChild.querySelectorAll(
-            ".button[data-type='add']"
+          event.target.parentElement.parentElement.appendChild(
+            wrapper.firstElementChild
           );
-        addBtns.forEach((addBtn) => {
-          addBtn.addEventListener("click", () => {
-            addBtn.nextElementSibling.textContent =
-              Number(addBtn.nextElementSibling.textContent) + 1;
+
+          event.target.querySelector("textarea").value = "";
+          event.target.classList.add("hidden");
+          replyBox.removeEventListener("submit", handleReplyThread);
+          const addBtns =
+            event.target.parentElement.parentElement.lastElementChild.querySelectorAll(
+              ".button[data-type='add']"
+            );
+          addBtns.forEach((addBtn) => {
+            addBtn.addEventListener("click", () => {
+              addBtn.nextElementSibling.textContent =
+                Number(addBtn.nextElementSibling.textContent) + 1;
+            });
           });
-        });
-        const takeBtns =
-          event.target.parentElement.parentElement.lastElementChild.querySelectorAll(
-            ".button[data-type='take']"
-          );
-        takeBtns.forEach((takeBtn) => {
-          takeBtn.addEventListener("click", () => {
-            takeBtn.previousElementSibling.textContent =
-              Number(takeBtn.previousElementSibling.textContent) === 0
-                ? 0
-                : Number(takeBtn.previousElementSibling.textContent) - 1;
+          const takeBtns =
+            event.target.parentElement.parentElement.lastElementChild.querySelectorAll(
+              ".button[data-type='take']"
+            );
+          takeBtns.forEach((takeBtn) => {
+            takeBtn.addEventListener("click", () => {
+              takeBtn.previousElementSibling.textContent =
+                Number(takeBtn.previousElementSibling.textContent) === 0
+                  ? 0
+                  : Number(takeBtn.previousElementSibling.textContent) - 1;
+            });
           });
-        });
-        const delBtns =
-          event.target.parentElement.parentElement.lastElementChild.querySelectorAll(
-            ".button[data-type='delete']"
-          );
-        delBtns.forEach((delBtn) => {
-          delBtn.addEventListener("click", () => {
-            const modal =
-              delBtn.parentElement.parentElement.parentElement.parentElement.querySelector(
-                ".modal"
+          const delBtns =
+            event.target.parentElement.parentElement.lastElementChild.querySelectorAll(
+              ".button[data-type='delete']"
+            );
+          delBtns.forEach((delBtn) => {
+            delBtn.addEventListener("click", () => {
+              const modal =
+                delBtn.parentElement.parentElement.parentElement.parentElement.querySelector(
+                  ".modal"
+                );
+              modal.showModal();
+              const close = modal.querySelector(
+                ".button[data-type='delete-comment'"
               );
-            modal.showModal();
-            const close = modal.querySelector(
-              ".button[data-type='delete-comment'"
-            );
-            close.addEventListener("click", () => {
-              delBtn.parentElement.parentElement.parentElement.parentElement.remove();
-            });
-            const cancel = modal.querySelector(".button[data-type='cancel'");
-            cancel.addEventListener("click", () => {
-              modal.close();
+              close.addEventListener("click", () => {
+                delBtn.parentElement.parentElement.parentElement.parentElement.remove();
+              });
+              const cancel = modal.querySelector(".button[data-type='cancel'");
+              cancel.addEventListener("click", () => {
+                modal.close();
+              });
             });
           });
-        });
-        const editBtns =
-          event.target.parentElement.parentElement.lastElementChild.querySelectorAll(
-            ".button[data-type='edit']"
-          );
-        editBtns.forEach((editBtn) => {
-          editBtn.addEventListener("click", () => {
-            editBtn.parentElement.parentElement.previousElementSibling.children[1].contentEditable =
-              "true";
-            editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
-              "hidden"
+          const editBtns =
+            event.target.parentElement.parentElement.lastElementChild.querySelectorAll(
+              ".button[data-type='edit']"
             );
-            editBtn.parentElement.parentElement.nextElementSibling.classList.add(
-              "editing"
-            );
-            editBtn.parentElement.parentElement.previousElementSibling.classList.add(
-              "flashing"
-            );
-            editBtn.parentElement.parentElement.previousElementSibling.scrollIntoView(
-              { behavior: "smooth" }
-            );
+          editBtns.forEach((editBtn) => {
+            editBtn.addEventListener("click", () => {
+              editBtn.parentElement.parentElement.previousElementSibling.children[1].contentEditable =
+                "true";
+              editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
+                "hidden"
+              );
+              editBtn.parentElement.parentElement.nextElementSibling.classList.add(
+                "editing"
+              );
+              editBtn.parentElement.parentElement.previousElementSibling.classList.add(
+                "flashing"
+              );
+              editBtn.parentElement.parentElement.previousElementSibling.scrollIntoView(
+                { behavior: "smooth" }
+              );
 
-            editBtn.parentElement.parentElement.previousElementSibling.addEventListener(
-              "animationend",
-              () => {
-                editBtn.parentElement.parentElement.previousElementSibling.classList.remove(
-                  "flashing"
-                );
-              }
-            );
+              editBtn.parentElement.parentElement.previousElementSibling.addEventListener(
+                "animationend",
+                () => {
+                  editBtn.parentElement.parentElement.previousElementSibling.classList.remove(
+                    "flashing"
+                  );
+                }
+              );
 
-            editBtn.parentElement.parentElement.nextElementSibling.addEventListener(
-              "click",
-              () => {
-                editBtn.parentElement.parentElement.previousElementSibling.children[1].contentEditable =
-                  "false";
-                editBtn.parentElement.parentElement.nextElementSibling.classList.add(
-                  "hidden"
-                );
-                editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
-                  "editing"
-                );
-              }
-            );
+              editBtn.parentElement.parentElement.nextElementSibling.addEventListener(
+                "click",
+                () => {
+                  editBtn.parentElement.parentElement.previousElementSibling.children[1].contentEditable =
+                    "false";
+                  editBtn.parentElement.parentElement.nextElementSibling.classList.add(
+                    "hidden"
+                  );
+                  editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
+                    "editing"
+                  );
+                }
+              );
+            });
           });
-        });
+        }
       }
       replyBox.addEventListener("submit", handleReplyThread);
     });
@@ -422,105 +430,108 @@ const newComment = document.querySelector("#create-comment");
 function handleCreateComment(event) {
   event.preventDefault();
   const formText = new FormData(event.target);
-  const commentReply = {
-    id: 3,
-    content: [...formText.entries()][0][1],
-    createdAt: "just now",
-    score: 0,
-    user: {
-      image: {
-        png: user.image.png,
-        webp: user.image.webp,
+  const entries = [...formText.entries()];
+  if (entries[0][1]) {
+    const commentReply = {
+      id: 3,
+      content: entries[0][1],
+      createdAt: "just now",
+      score: 0,
+      user: {
+        image: {
+          png: user.image.png,
+          webp: user.image.webp,
+        },
+        username: user.username,
       },
-      username: user.username,
-    },
-  };
-  const wrapper = document.createElement("div");
-  wrapper.innerHTML = mainComment(commentReply, user?.username);
-  commentsSection.appendChild(wrapper.firstElementChild);
-  commentsSection.appendChild(wrapper.firstElementChild);
-  event.target.querySelector("textarea").value = "";
-  const newComment =
-    commentsSection.children[commentsSection.children.length - 2];
-  const addBtns = newComment.querySelectorAll(".button[data-type='add']");
+    };
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = mainComment(commentReply, user?.username);
+    commentsSection.appendChild(wrapper.firstElementChild);
+    commentsSection.appendChild(wrapper.firstElementChild);
+    event.target.querySelector("textarea").value = "";
+    const newComment =
+      commentsSection.children[commentsSection.children.length - 2];
+    const addBtns = newComment.querySelectorAll(".button[data-type='add']");
 
-  addBtns.forEach((addBtn) => {
-    addBtn.addEventListener("click", () => {
-      addBtn.nextElementSibling.textContent =
-        Number(addBtn.nextElementSibling.textContent) + 1;
+    addBtns.forEach((addBtn) => {
+      addBtn.addEventListener("click", () => {
+        addBtn.nextElementSibling.textContent =
+          Number(addBtn.nextElementSibling.textContent) + 1;
+      });
     });
-  });
-  const takeBtns = newComment.querySelectorAll(".button[data-type='take']");
-  takeBtns.forEach((takeBtn) => {
-    takeBtn.addEventListener("click", () => {
-      takeBtn.previousElementSibling.textContent =
-        Number(takeBtn.previousElementSibling.textContent) === 0
-          ? 0
-          : Number(takeBtn.previousElementSibling.textContent) - 1;
+    const takeBtns = newComment.querySelectorAll(".button[data-type='take']");
+    takeBtns.forEach((takeBtn) => {
+      takeBtn.addEventListener("click", () => {
+        takeBtn.previousElementSibling.textContent =
+          Number(takeBtn.previousElementSibling.textContent) === 0
+            ? 0
+            : Number(takeBtn.previousElementSibling.textContent) - 1;
+      });
     });
-  });
-  const delBtns = newComment.querySelectorAll(".button[data-type='delete']");
+    const delBtns = newComment.querySelectorAll(".button[data-type='delete']");
 
-  delBtns.forEach((delBtn) => {
-    delBtn.addEventListener("click", () => {
-      const modal =
-        delBtn.parentElement.parentElement.parentElement.parentElement.querySelector(
-          ".modal"
+    delBtns.forEach((delBtn) => {
+      delBtn.addEventListener("click", () => {
+        const modal =
+          delBtn.parentElement.parentElement.parentElement.parentElement.querySelector(
+            ".modal"
+          );
+        modal.showModal();
+        const close = modal.querySelector(".button[data-type='delete-comment'");
+        close.addEventListener("click", () => {
+          delBtn.parentElement.parentElement.parentElement.parentElement.nextElementSibling.remove();
+          delBtn.parentElement.parentElement.parentElement.parentElement.remove();
+        });
+        const cancel = modal.querySelector(".button[data-type='cancel'");
+        cancel.addEventListener("click", () => {
+          modal.close();
+        });
+      });
+    });
+    const editBtns = newComment.querySelectorAll(".button[data-type='edit']");
+    editBtns.forEach((editBtn) => {
+      editBtn.addEventListener("click", () => {
+        editBtn.parentElement.parentElement.previousElementSibling.contentEditable =
+          "true";
+        editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
+          "hidden"
         );
-      modal.showModal();
-      const close = modal.querySelector(".button[data-type='delete-comment'");
-      close.addEventListener("click", () => {
-        delBtn.parentElement.parentElement.parentElement.parentElement.nextElementSibling.remove();
-        delBtn.parentElement.parentElement.parentElement.parentElement.remove();
-      });
-      const cancel = modal.querySelector(".button[data-type='cancel'");
-      cancel.addEventListener("click", () => {
-        modal.close();
+        editBtn.parentElement.parentElement.nextElementSibling.classList.add(
+          "editing"
+        );
+        editBtn.parentElement.parentElement.previousElementSibling.classList.add(
+          "flashing"
+        );
+        editBtn.parentElement.parentElement.previousElementSibling.scrollIntoView(
+          { behavior: "smooth" }
+        );
+
+        editBtn.parentElement.parentElement.previousElementSibling.addEventListener(
+          "animationend",
+          () => {
+            editBtn.parentElement.parentElement.previousElementSibling.classList.remove(
+              "flashing"
+            );
+          }
+        );
+
+        editBtn.parentElement.parentElement.nextElementSibling.addEventListener(
+          "click",
+          () => {
+            editBtn.parentElement.parentElement.previousElementSibling.contentEditable =
+              "false";
+            editBtn.parentElement.parentElement.nextElementSibling.classList.add(
+              "hidden"
+            );
+            editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
+              "editing"
+            );
+          }
+        );
       });
     });
-  });
-  const editBtns = newComment.querySelectorAll(".button[data-type='edit']");
-  editBtns.forEach((editBtn) => {
-    editBtn.addEventListener("click", () => {
-      editBtn.parentElement.parentElement.previousElementSibling.contentEditable =
-        "true";
-      editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
-        "hidden"
-      );
-      editBtn.parentElement.parentElement.nextElementSibling.classList.add(
-        "editing"
-      );
-      editBtn.parentElement.parentElement.previousElementSibling.classList.add(
-        "flashing"
-      );
-      editBtn.parentElement.parentElement.previousElementSibling.scrollIntoView(
-        { behavior: "smooth" }
-      );
-
-      editBtn.parentElement.parentElement.previousElementSibling.addEventListener(
-        "animationend",
-        () => {
-          editBtn.parentElement.parentElement.previousElementSibling.classList.remove(
-            "flashing"
-          );
-        }
-      );
-
-      editBtn.parentElement.parentElement.nextElementSibling.addEventListener(
-        "click",
-        () => {
-          editBtn.parentElement.parentElement.previousElementSibling.contentEditable =
-            "false";
-          editBtn.parentElement.parentElement.nextElementSibling.classList.add(
-            "hidden"
-          );
-          editBtn.parentElement.parentElement.nextElementSibling.classList.remove(
-            "editing"
-          );
-        }
-      );
-    });
-  });
+  }
 }
 
 newComment.addEventListener("submit", handleCreateComment);
